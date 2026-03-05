@@ -1,0 +1,499 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a241e7bd-6150-4411-86bd-778b470b7ba4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\MANSI SINGH\\.n8n-files\\Bens_Electric_Demo.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "97fec952-cf39-49cd-b593-7eae41023aab",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Analyze the attached transcript for Ben's Electric.Step 1: Extract Account Memo JSON\nExtract these fields: account_id (use 'BEN001'), company_name, business_hours, services_supported, emergency_definition, and emergency_routing_rules .\nConstraint: If any info is missing, list it in questions_or_unknowns. Do not hallucinate .Step 2: Generate v1 Agent Spec\nCreate a system prompt for a voice agent. It MUST include:\n- A professional greeting and request for the caller's name and number.\n- Logic for routing based on the extracted rules .\n- A clear fallback protocol if a call transfer fails.Output the entire result as a single JSON object.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        416,
+        0
+      ],
+      "id": "cfebeebb-b0f6-46a3-a6ee-ea228e47810f",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        208
+      ],
+      "id": "21c8bb92-aa1e-4a60-a96c-ad91fae08b83",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EavBihbSS6kEU8BJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\MANSI SINGH\\.n8n-files\\chat.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        32
+      ],
+      "id": "3fbfb245-b489-46cf-a0a3-e825f3a1d386",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo",
+          "mode": "list",
+          "cachedResultName": "Clara_Automation_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "account_id",
+              "displayName": "account_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "memo_v1",
+              "displayName": "memo_v1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "agent_spec_v1",
+              "displayName": "agent_spec_v1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "v2_updates",
+              "displayName": "v2_updates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "changelog",
+              "displayName": "changelog",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        912,
+        144
+      ],
+      "id": "26411054-eb54-4487-ad15-bfa02b015a25",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eyKcrbwfjKG4dXZI",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo",
+          "mode": "list",
+          "cachedResultName": "Clara_Automation_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "account_id",
+              "lookupValue": "BEN001"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        32
+      ],
+      "id": "9ab33daf-b361-4a3b-9ad6-c87b7440e4b3",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eyKcrbwfjKG4dXZI",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Compare the v1 Memo (from Google Sheets) with the new Onboarding Chat (from the file).\n\nCreate a v2 Account Memo and v2 Agent Spec.\n\nThe Onboarding Chat is the new source of truth for missing info like business hours and routing rules.\n\nCrucial: Generate a changelog field listing every specific update (e.g., 'Business hours confirmed as 8 AM - 5 PM').\n\nOutput as a single JSON object.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1184,
+        32
+      ],
+      "id": "c840dfb1-9b98-442d-b956-b50611364f18",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo",
+          "mode": "list",
+          "cachedResultName": "Clara_Automation_Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/1Oq2XT2ADPbyHU5zZra4kHOpLYOfuxidh9ZyyDdH4sGo/edit#gid=0",
+          "__regex": "https:\\/\\/docs\\.google\\.com\\/spreadsheets\\/d\\/[0-9a-zA-Z\\-_]+.*\\#gid=([0-9]+)"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "account_id": "BEN001",
+            "v2_updates": "={\\n    \"account_id\": \"BEN001\",\\n    \"company_name\": \"Ben's Electric\",\\n    \"business_hours\": \"Monday-Friday, 8 AM - 5 PM\",\\n    \"services_supported\": [\\n      \"Residential electrical services\",\\n      \"Commercial electrical services\",\\n      \"Electrical repairs\",\\n      \"New electrical installations\",\\n      \"Routine electrical maintenance\"\\n    ],\\n    \"emergency_definition\": \"Complete power outage, sparking wires, or a burning smell from an electrical outlet.\",\\n    \"emergency_routing_rules\": {\\n      \"during_business_hours\": \"Transfer to main office line.\",\\n      \"after_hours\": \"Transfer to on-call technician.\"\\n    },\\n    \"questions_or_unknowns\": []\\n  },\\n  \"v1_agent_spec\": {\\n    \"system_prompt\": \"You are a professional voice agent for Ben's Electric. Your primary goal is to assist callers by routing them correctly based on their needs, especially for emergencies, and to capture necessary information if a transfer isn't possible.\\n\\n**Greeting & Information Capture:**\\nStart by greeting the caller professionally: \\\"Thank you for calling Ben's Electric. My name is [Your Agent Name]. May I please have your name and phone number so I can assist you?\\\"\\n\\n**Routing Logic:**\\n1.  **Identify Call Type:** Listen carefully to determine if the caller's need is a general inquiry, service request, or an emergency.\\n2.  **Emergency Identification:** An emergency is defined as a complete power outage, sparking wires, or a burning smell from an electrical outlet. If the caller describes any of these, it's an emergency.\\n3.  **Emergency Routing:**\\n    *   **During Business Hours (Monday-Friday, 8 AM - 5 PM PST):** If it's an emergency and within business hours, state: \\\"I understand this is an emergency. I will transfer you to our main office line immediately.\\\" Attempt to transfer to the main office line.\\n    *   **After Hours (Outside Monday-Friday, 8 AM - 5 PM PST):** If it's an emergency and outside business hours, state: \\\"I understand this is an emergency. I will connect you directly with our on-call technician.\\\" Attempt to transfer to the on-call technician.\\n4.  **General Service/Inquiry Routing:** For all other non-emergency requests or inquiries (e.g., scheduling an appointment, asking about services, billing questions), state: \\\"I can help with that. Please hold while I connect you with a member of our team who can assist with [caller's request].\\\" Attempt to transfer to the main office line.\\n\\n**Fallback Protocol (if transfer fails):**\\nIf a call transfer fails for any reason (e.g., line busy, no answer, technical issue), inform the caller immediately:\\n\\\"I apologize, but I was unable to complete the transfer at this moment. To ensure you get the prompt assistance you need, may I please confirm your name, phone number, and a brief description of your issue? Our team will call you back within 15 minutes for emergencies, or as soon as possible for non-urgent matters.\\\" Capture their name, phone number, and the nature of their request, then politely end the call: \\\"Thank you for providing that information. Someone from Ben's Electric will call you back shortly. Have a great day.\\\"\\n\\n**Company Information Reminder:**\\nBen's Electric is open Monday-Friday, 8 AM - 5 PM PST, and specializes in residential and commercial electrical services including repairs, new installations, and routine maintenance.\"\\n  }",
+            "changelog": "=[\\n      \"The transcript was not provided, therefore specific business_hours, services_supported, emergency_definition, and emergency_routing_rules could not be extracted. The agent spec below uses generic placeholders for these details.\"\\n    ]",
+            "text": "=```json\\n{\\n  \"account_memo_json\": {\\n    \"account_id\": \"BEN001\",\\n    \"company_name\": \"Ben's Electric\",\\n    \"business_hours\": null,\\n    \"services_supported\": null,\\n    \"emergency_definition\": null,\\n    \"emergency_routing_rules\": null,\\n    \"questions_or_unknowns\": [\\n      \"The transcript was not provided, therefore specific business_hours, services_supported, emergency_definition, and emergency_routing_rules could not be extracted. The agent spec below uses generic placeholders for these details.\"\\n    ]\\n  },\\n  \"v1_agent_spec\": {\\n    \"system_prompt\": \"You are a professional voice agent for Ben's Electric. Your primary goal is to assist callers efficiently by understanding their needs and routing them correctly. Always maintain a polite and helpful demeanor.\\n\\nHere is your protocol:\\n\\n1.  **Greeting & Information Collection:**\\n    *   Start with a professional greeting: \\\"Thank you for calling Ben's Electric, my name is [Your Agent Name]. How may I help you today?\\\"\\n    *   After the initial greeting, politely ask for the caller's full name and phone number: \\\"To best assist you, could I please have your full name and phone number?\\\"\\n\\n2.  **Service Request Assessment:**\\n    *   Listen carefully to the caller's request.\\n    *   Determine if the request is an emergency or a non-emergency service request based on typical definitions (e.g., no power, sparking wires, burning smell, or any immediate safety hazard are emergencies).\\n\\n3.  **Routing Logic (Placeholders due to missing transcript information):**\\n    *   **Emergency Services (e.g., immediate power outage, sparking, safety hazard):**\\n        *   If the call is an emergency AND it is within or outside of assumed business hours (e.g., 24/7 emergency service), state: \\\"I understand this is an emergency. I am transferring you to our emergency dispatch immediately.\\\" Then, attempt to transfer to the dedicated emergency line (e.g., 'tel:+15551234567').\\n    *   **Non-Emergency Services (e.g., new installation quote, routine maintenance, billing inquiry):**\\n        *   If the call is a non-emergency AND it is within assumed business hours (e.g., Monday-Friday, 8 AM - 5 PM), state: \\\"For your [service type, e.g., installation quote], I'll connect you with our customer service team.\\\" Then, attempt to transfer to the main customer service line (e.g., 'tel:+15551230000').\\n        *   If the call is a non-emergency AND it is outside of assumed business hours, state: \\\"Our customer service team is currently closed. Our regular business hours are [assumed business hours, e.g., Monday through Friday, 8 AM to 5 PM]. Would you like me to leave a message for them to call you back during business hours, or would you prefer to call back then?\\\"\\n\\n4.  **Fallback Protocol for Failed Transfers:**\\n    *   If a transfer attempt (emergency or non-emergency) fails for any reason:\\n        *   Apologize promptly: \\\"I apologize, it seems I'm unable to connect you at this moment.\\\"\\n        *   Offer alternatives: \\\"Would you like me to try again, or would you prefer to leave a detailed message with your name, number, and the nature of your request, and someone will get back to you as soon as possible?\\\"\\n        *   If the caller opts to leave a message, confirm receipt: \\\"Thank you. I have recorded your message, and someone will contact you shortly.\\\" Then, ensure the message is logged with all collected details.\"\\n  }\\n}\\n```"
+          },
+          "matchingColumns": [
+            "account_id"
+          ],
+          "schema": [
+            {
+              "id": "account_id",
+              "displayName": "account_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "memo_v1",
+              "displayName": "memo_v1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "agent_spec_v1",
+              "displayName": "agent_spec_v1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "v2_updates",
+              "displayName": "v2_updates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "changelog",
+              "displayName": "changelog",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        32
+      ],
+      "id": "ae9ecd32-27c3-4f60-9ac3-09497146af76",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eyKcrbwfjKG4dXZI",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        240
+      ],
+      "id": "0c7a657b-27ad-4887-871f-1f3e9968eede",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "EavBihbSS6kEU8BJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "01d0e681-e1be-40d9-8300-8ca5e1688ae5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "470d1b22716f5a69090e7d3d2c0589ada59f6e8a5b8f3bfdc82929338f29e6f9"
+  },
+  "id": "iiFheS6XauJJztti",
+  "tags": []
+}
